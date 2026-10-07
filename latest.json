@@ -2,11 +2,13 @@
   "versionCode": 11,
   "versionName": "1.1.0",
   "apkUrl": "https://github.com/kwanene08-ux/GPSRateMonitor/releases/download/v1.1.0/GPSRateMonitor-1.1.0.apk",
-  "sha256": "",
+  "sha256": "4731addd7411f2ae0ad0d1bcf5223888c4d584dcf6387cc8b5ab5d96b22d7f6b",
   "mandatory": false,
   "releaseNotes": [
     "GPS Rate Monitor V1.1.0",
-    "เพิ่มระบบตรวจสอบอัปเดตแอป",
-    "ตรวจ SHA-256 ก่อนติดตั้ง APK"
+    "เพิ่มระบบ Update Center",
+    "ตรวจสอบเวอร์ชันผ่าน GitHub",
+    "ตรวจ SHA-256 ก่อนติดตั้ง APK",
+    "ใช้ Release Signing Key"
   ]
 }
