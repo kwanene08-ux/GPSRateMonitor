@@ -16,7 +16,7 @@ data class UpdateInfo(
 
 object UpdateManager {
     private const val UPDATE_URL = "https://raw.githubusercontent.com/kwanene08-ux/GPSRateMonitor/main/latest.json"
-    private const val CURRENT_VERSION_CODE = 12
+    private const val CURRENT_VERSION_CODE = 14
     private const val PACKAGE_NAME = "com.kwan.gpsratemonitor"
 
     suspend fun check(): UpdateInfo = try {
@@ -38,7 +38,12 @@ object UpdateManager {
             val apk = File(context.cacheDir, "gps-update-${info.versionCode}.apk")
             part.delete(); apk.delete()
             val c = URL(info.apkUrl).openConnection() as HttpURLConnection
-            c.connectTimeout = 15000; c.readTimeout = 30000; c.connect()
+            c.instanceFollowRedirects = true
+            c.connectTimeout = 20000
+            c.readTimeout = 60000
+            c.setRequestProperty("User-Agent", "GPSRateMonitor/$CURRENT_VERSION_CODE")
+            c.setRequestProperty("Accept", "application/vnd.android.package-archive,*/*")
+            c.connect()
             require(c.responseCode in 200..299) { "HTTP ${c.responseCode}" }
             val total = c.contentLengthLong
             c.inputStream.use { input -> part.outputStream().use { out ->
@@ -62,11 +67,32 @@ object UpdateManager {
     }
 
     private fun fetch(url:String):String {
-        require(url.startsWith("https://"))
-        val c=URL(url).openConnection() as HttpURLConnection
-        c.connectTimeout=10000;c.readTimeout=15000;c.connect()
-        require(c.responseCode in 200..299){"HTTP ${c.responseCode}"}
-        return c.inputStream.bufferedReader().use{it.readText()}.also{c.disconnect()}
+        require(url.startsWith("https://")) { "URL ต้องใช้ HTTPS" }
+
+        val c = URL(url).openConnection() as HttpURLConnection
+        c.instanceFollowRedirects = true
+        c.connectTimeout = 20000
+        c.readTimeout = 30000
+        c.setRequestProperty("User-Agent", "GPSRateMonitor/$CURRENT_VERSION_CODE")
+        c.setRequestProperty("Accept", "application/json,text/plain,*/*")
+
+        try {
+            c.connect()
+
+            val code = c.responseCode
+            require(code in 200..299) {
+                val detail = try {
+                    c.errorStream?.bufferedReader()?.use { it.readText().take(300) }
+                } catch (_: Exception) {
+                    null
+                }
+                if (detail.isNullOrBlank()) "HTTP $code" else "HTTP $code: $detail"
+            }
+
+            return c.inputStream.bufferedReader().use { it.readText() }
+        } finally {
+            c.disconnect()
+        }
     }
     private fun sha256(f:File):String {
         val md=MessageDigest.getInstance("SHA-256")

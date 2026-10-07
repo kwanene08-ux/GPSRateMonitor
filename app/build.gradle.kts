@@ -24,8 +24,8 @@ android {
         applicationId = "com.kwan.gpsratemonitor"
         minSdk = 26
         targetSdk = 35
-        versionCode = 12
-        versionName = "1.2.0"
+        versionCode = 14
+        versionName = "1.2.2"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
