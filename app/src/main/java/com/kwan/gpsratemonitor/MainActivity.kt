@@ -360,7 +360,19 @@ fun UpdatePage(pageBack: () -> Unit) {
 
     Spacer(Modifier.height(12.dp))
 
-    Text("ติดตั้งอยู่: 1.2.0")
+    Text(
+        "ติดตั้งอยู่: ${
+            try {
+                @Suppress("DEPRECATION")
+                context.packageManager.getPackageInfo(
+                    context.packageName,
+                    0
+                ).versionName ?: "ไม่ทราบ"
+            } catch (_: Exception) {
+                "ไม่ทราบ"
+            }
+        }"
+    )
 
     Spacer(Modifier.height(12.dp))
 
@@ -632,9 +644,9 @@ fun HzGraph(
         }
 
         drawPath(
-    color = Color.White,
-path = path
-
+    color = Color(0xFF00E5FF),
+path = path,
+    style = androidx.compose.ui.graphics.drawscope.Stroke(width = 4f),
 )
 
         values.takeLast(1).forEach { value ->
@@ -648,7 +660,7 @@ path = path
                     size.height
 
             drawCircle(
-    color = Color.White,
+    color = Color(0xFF00E5FF),
 radius = 6f,
                 center = Offset(x, y
 )

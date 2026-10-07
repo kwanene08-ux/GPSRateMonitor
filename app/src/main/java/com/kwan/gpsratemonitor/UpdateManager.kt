@@ -8,6 +8,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
 import org.json.JSONObject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 data class UpdateInfo(
     val versionCode: Int, val versionName: String, val apkUrl: String, val sha256: String,
@@ -16,21 +18,40 @@ data class UpdateInfo(
 
 object UpdateManager {
     private const val UPDATE_URL = "https://raw.githubusercontent.com/kwanene08-ux/GPSRateMonitor/main/latest.json"
-    private const val CURRENT_VERSION_CODE = 14
+    private const val CURRENT_VERSION_CODE = 15
     private const val PACKAGE_NAME = "com.kwan.gpsratemonitor"
 
-    suspend fun check(): UpdateInfo = try {
+    suspend fun check(): UpdateInfo = withContext(Dispatchers.IO) {
+        try {
         val o = JSONObject(fetch(UPDATE_URL))
         val code = o.getInt("versionCode")
         UpdateInfo(code, o.getString("versionName"), o.getString("apkUrl"), o.getString("sha256").lowercase(),
             o.optBoolean("mandatory"), buildList {
                 o.optJSONArray("releaseNotes")?.let { a -> for (i in 0 until a.length()) add(a.getString(i)) }
             }, code > CURRENT_VERSION_CODE)
-    } catch (e: Exception) {
-        UpdateInfo(0,"","","",false,emptyList(),false,e.message ?: "ตรวจสอบไม่สำเร็จ")
+        } catch (e: Exception) {
+            val detail = e.message?.takeIf { it.isNotBlank() }
+                ?: e::class.java.simpleName
+                ?: "ตรวจสอบไม่สำเร็จ"
+
+            UpdateInfo(
+                0,
+                "",
+                "",
+                "",
+                false,
+                emptyList(),
+                false,
+                "ตรวจสอบไม่สำเร็จ: $detail"
+            )
+        }
     }
 
-    suspend fun downloadAndVerify(context: Context, info: UpdateInfo, progress: (Int)->Unit): Result =
+    suspend fun downloadAndVerify(
+        context: Context,
+        info: UpdateInfo,
+        progress: (Int) -> Unit
+    ): Result = withContext(Dispatchers.IO) {
         try {
             require(info.versionCode > CURRENT_VERSION_CODE) { "เวอร์ชันใหม่ไม่สูงกว่าเวอร์ชันปัจจุบัน" }
             require(info.apkUrl.startsWith("https://")) { "ต้องใช้ HTTPS" }
@@ -54,7 +75,15 @@ object UpdateManager {
             require(sha256(part).equals(info.sha256, true)) { "SHA-256 ไม่ตรง" }
             require(part.renameTo(apk)) { "เตรียม APK ไม่สำเร็จ" }
             Result(true, null)
-        } catch(e: Exception) { Result(false, e.message ?: "ดาวน์โหลดล้มเหลว") }
+        } catch(e: Exception) {
+            Result(
+                false,
+                e.message?.takeIf { it.isNotBlank() }
+                    ?: e::class.java.simpleName
+                    ?: "ดาวน์โหลดล้มเหลว"
+            )
+        }
+    }
 
     fun install(context: Context) {
         val f = context.cacheDir.listFiles()?.firstOrNull { it.name.startsWith("gps-update-") && it.name.endsWith(".apk") }

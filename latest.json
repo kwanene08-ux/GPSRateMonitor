@@ -1,16 +1,16 @@
 {
-  "versionCode": 14,
-  "versionName": "1.2.2",
-  "apkUrl": "https://github.com/kwanene08-ux/GPSRateMonitor/releases/download/v1.2.2/GPSRateMonitor-1.2.2.apk",
-  "sha256": "25f60d44ec4380ba55bd79fe13fdd837a789a16978462733211f2a74fc29059b",
+  "versionCode": 15,
+  "versionName": "1.2.3",
+  "apkUrl": "https://github.com/kwanene08-ux/GPSRateMonitor/releases/download/v1.2.3/app-release.apk",
+  "sha256": "8452af013f3cc3062dbf977e059999d04fd63d1bb6281415bc0c165c8b63a373",
   "mandatory": false,
   "releaseNotes": [
-    "GPS Rate Monitor V1.2.2",
-    "ปรับปรุงระบบ Update Center",
-    "รองรับ HTTPS Redirect ได้ดีขึ้น",
-    "เพิ่ม User-Agent สำหรับการเชื่อมต่อ",
-    "เพิ่ม Timeout สำหรับเครือข่ายที่ช้าหรือไม่เสถียร",
-    "แสดงรายละเอียด HTTP Error ได้ชัดเจนขึ้น",
-    "ปรับปรุงความเสถียรในการตรวจสอบอัปเดตและดาวน์โหลด APK"
+    "GPS Rate Monitor V1.2.3",
+    "แก้ไข Update Center ตรวจสอบอัปเดตไม่สำเร็จ",
+    "ย้ายงาน Network ไปทำงานบน Background Thread",
+    "แก้ปัญหา NetworkOnMainThreadException",
+    "ปรับปรุงการดาวน์โหลด APK ให้ไม่ค้างหน้าจอ",
+    "แสดงเวอร์ชันที่ติดตั้งจริงอัตโนมัติ",
+    "ปรับปรุงความเสถียรของ Update Center"
   ]
 }
