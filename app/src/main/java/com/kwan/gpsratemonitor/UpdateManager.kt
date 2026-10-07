@@ -16,7 +16,7 @@ data class UpdateInfo(
 
 object UpdateManager {
     private const val UPDATE_URL = "https://raw.githubusercontent.com/kwanene08-ux/GPSRateMonitor/main/latest.json"
-    private const val CURRENT_VERSION_CODE = 11
+    private const val CURRENT_VERSION_CODE = 12
     private const val PACKAGE_NAME = "com.kwan.gpsratemonitor"
 
     suspend fun check(): UpdateInfo = try {

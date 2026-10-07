@@ -1,14 +1,17 @@
 {
-  "versionCode": 11,
-  "versionName": "1.1.0",
-  "apkUrl": "https://github.com/kwanene08-ux/GPSRateMonitor/releases/download/v1.1.0/GPSRateMonitor-1.1.0.apk",
-  "sha256": "4731addd7411f2ae0ad0d1bcf5223888c4d584dcf6387cc8b5ab5d96b22d7f6b",
+  "versionCode": 12,
+  "versionName": "1.2.0",
+  "apkUrl": "https://github.com/kwanene08-ux/GPSRateMonitor/releases/download/v1.2.0/GPSRateMonitor-1.2.0.apk",
+  "sha256": "5d1a078e38f79a988ee34ad42de52039a147a5d17b0b727cc055143aaa4c5bbb",
   "mandatory": false,
   "releaseNotes": [
-    "GPS Rate Monitor V1.1.0",
-    "เพิ่มระบบ Update Center",
-    "ตรวจสอบเวอร์ชันผ่าน GitHub",
-    "ตรวจ SHA-256 ก่อนติดตั้ง APK",
-    "ใช้ Release Signing Key"
+    "GPS Rate Monitor V1.2.0",
+    "วัด GPS Update Rate จริงจาก Android Location Callback",
+    "แสดง Current / Average / Min / Max GPS Hz",
+    "แสดง GPS Accuracy และ Location Update Interval",
+    "ตรวจจับ GPS Drop",
+    "แสดง GNSS Satellites และ C/N0",
+    "กราฟ GPS Hz แบบ Real-time",
+    "เพิ่มหน้า GPS Details"
   ]
 }
